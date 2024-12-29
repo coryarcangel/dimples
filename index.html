@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dolly Dimples Style Square</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+            font-family: 'Oswald', Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .title {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #FDB315;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Oswald', Arial, sans-serif;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+        .download-btn:hover {
+            background-color: #e09e13;
+        }
+        #svg-container {
+            margin-bottom: 40px;
+        }
+        svg {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="title">DIMPLES SQ</div>
+        <div class="subtitle">Malerier inspirert av Dolly Dimples pizzabokser  </div>
+        <div id="svg-container"></div>
+        <button class="download-btn" onclick="downloadSVG()">Download SVG</button>
+    </div>
+
+    <script>
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function createSVG() {
+            const svgNamespace = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNamespace, "svg");
+            svg.setAttribute("width", "300");
+            svg.setAttribute("height", "300");
+            svg.setAttribute("viewBox", "0 0 300 300");
+
+            const outerSquare = document.createElementNS(svgNamespace, "rect");
+            outerSquare.setAttribute("width", "300");
+            outerSquare.setAttribute("height", "300");
+            outerSquare.setAttribute("fill", "#FDB315");
+            svg.appendChild(outerSquare);
+
+            const innerSquare = document.createElementNS(svgNamespace, "rect");
+            innerSquare.setAttribute("width", "150");
+            innerSquare.setAttribute("height", "150");
+            innerSquare.setAttribute("fill", "black");
+
+            const randomX = getRandomInt(0, 150);
+            const randomY = getRandomInt(0, 150);
+            const randomRotation = getRandomInt(0, 360);
+
+            innerSquare.setAttribute("x", randomX);
+            innerSquare.setAttribute("y", randomY);
+            innerSquare.setAttribute("transform", `rotate(${randomRotation}, ${randomX + 75}, ${randomY + 75})`);
+            
+            svg.appendChild(innerSquare);
+
+            // Create two smaller squares with black outlines, each 15% the size of the big black square
+            const smallSquareSize = 150 * 0.15;
+
+            for (let i = 0; i < 2; i++) {
+                const smallSquare = document.createElementNS(svgNamespace, "rect");
+                smallSquare.setAttribute("width", smallSquareSize);
+                smallSquare.setAttribute("height", smallSquareSize);
+                smallSquare.setAttribute("fill", "none");
+                smallSquare.setAttribute("stroke", "black");
+                smallSquare.setAttribute("stroke-width", "2");
+
+                // Random positions within the yellow square
+                const smallX = getRandomInt(0, 300 - smallSquareSize);
+                const smallY = getRandomInt(0, 300 - smallSquareSize);
+                smallSquare.setAttribute("x", smallX);
+                smallSquare.setAttribute("y", smallY);
+
+                svg.appendChild(smallSquare);
+            }
+
+            document.getElementById("svg-container").appendChild(svg);
+        }
+
+        function downloadSVG() {
+            const svg = document.querySelector("svg");
+            const serializer = new XMLSerializer();
+            const svgBlob = new Blob([serializer.serializeToString(svg)], {type: "image/svg+xml;charset=utf-8"});
+            const url = URL.createObjectURL(svgBlob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "dolly_dimples_square.svg";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        createSVG();
+    </script>
+</body>
+</html>
